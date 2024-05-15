@@ -5,23 +5,24 @@ import requests
 
 def call_api(url, data):
     response = requests.post(url, json=data)
-    print(f"API response status code for {url}: {response.status_code}")
+    print(f"API response status code for {url}: {response.status_code}, {response.json()}")
 
 def thread_function(url, data, trigger_time):
     while True:
         current_time = datetime.datetime.now()
-        if current_time.hour == trigger_time.hour and current_time.minute == trigger_time.minute:
+        # if current_time.hour == trigger_time.hour and current_time.minute == trigger_time.minute:
+        if current_time.second == trigger_time.second:
             call_api(url, data)
-        time.sleep(60)  # Check every minute
+        time.sleep(1)  # Check every minute
 
 # Define API endpoints and data
 api_data = [
-    {"url": "https://api1.example.com/endpoint",
-     "data": {"key1": "value1"}, "trigger_time": datetime.time(9, 0)},
-    {"url": "https://api2.example.com/endpoint",
-     "data": {"key2": "value2"}, "trigger_time": datetime.time(13, 30)},
-    {"url": "https://api3.example.com/endpoint",
-     "data": {"key3": "value3"}, "trigger_time": datetime.time(18, 0)}
+    {"url": "http://0.0.0.0:8000/call_api",
+     "data": {"key": "value1"}, "trigger_time": datetime.time(0, 0, 10)},
+    {"url": "http://0.0.0.0:8000/call_api",
+     "data": {"key": "value2"}, "trigger_time": datetime.time(0, 0, 20)},
+    {"url": "http://0.0.0.0:8000/call_api",
+     "data": {"key": "value3"}, "trigger_time": datetime.time(0, 0, 30)}
 ]
 
 # Create and start a thread for each API
